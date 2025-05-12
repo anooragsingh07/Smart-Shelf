@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartShelf – A smart way to manage your kitchen shelf</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <span class="app-logo"><i class="fas fa-cubes"></i></span>
+            <span class="app-title">SmartShelf</span>
+            <span class="app-subtitle">A smart way to manage your kitchen shelf</span>
+        </div>
+        <button id="themeToggle" class="theme-toggle" title="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+    <main class="main-content">
+        <section class="card add-item-card">
+            <div class="card-header">
+                <h2>Add New Item</h2>
+            </div>
+            <form id="addItemForm" class="form-flex">
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="unit">Unit</label>
+                    <select id="unit" required>
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                        <option value="l">litre</option>
+                        <option value="ml">ml</option>
+                        <option value="pcs">pcs</option>
+                        <option value="box">box</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="minLimit">Minimum Limit</label>
+                    <input type="number" id="minLimit" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="date" id="expiryDate">
+                </div>
+                <button type="submit" class="btn-primary">Add Item</button>
+            </form>
+        </section>
+        <section class="card inventory-card">
+            <div class="card-header inventory-header-flex">
+                <h2>Inventory</h2>
+                <div class="header-actions">
+                    <button id="downloadReceipt" class="btn-secondary">
+                        <i class="fas fa-download"></i> Download Shopping List
+                    </button>
+                    <button id="editShoppingListBtn" class="btn-secondary">
+                        <i class="fas fa-edit"></i> Edit Shopping List
+                    </button>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search items...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="legend">
+                <span class="legend-dot legend-good"></span> Good
+                <span class="legend-dot legend-soon"></span> Expires Soon
+                <span class="legend-dot legend-expired"></span> Use Immediately
+            </div>
+            <div class="table-responsive">
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Minimum Limit</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryBody">
+                        <!-- Items will be added here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <footer class="main-footer">
+            <span>Last Updated: <span id="lastUpdated"></span></span>
+        </footer>
+    </main>
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Update Quantity</h3>
+            <form id="updateForm">
+                <div class="form-group">
+                    <label for="updateQuantity">New Quantity</label>
+                    <input type="number" id="updateQuantity" min="0" step="0.01" required>
+                </div>
+                <button type="submit" class="btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
