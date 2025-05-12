@@ -1,49 +1,68 @@
-# Smart Shelf Project
+SmartShelf
+SmartShelf is a lightweight, browser-based kitchen inventory management system designed to help users efficiently track pantry items and avoid food waste. Built with HTML, CSS, and JavaScript, it runs entirely in the browser and requires no backend or external integrations.
 
-## Overview
-Smart Shelf is a web-based application that helps users manage and organize their items on shelves. It provides an intuitive interface for tracking items, their locations, and other relevant information.
+Features
+Add and manage pantry or kitchen items with quantity, unit, minimum stock limit, and expiry date.
 
-## Features
-- Interactive shelf management system
-- Real-time item tracking
-- User-friendly interface
-- Responsive design for various screen sizes
-- Easy item organization and categorization
+Automatic status indicators: Good, Expires Soon, or Use Immediately.
 
-## Technologies Used
-- HTML5
-- CSS3
-- JavaScript
-- Modern web development practices
+Editable shopping list based on inventory needs.
 
-## Project Structure
-```
-Smart Shelf/
-├── index.html      # Main application interface
-├── styles.css      # Styling and layout
-└── script.js       # Application logic and functionality
-```
+Local search functionality for quick filtering.
 
-## Getting Started
-1. Clone the repository
-2. Open `index.html` in your web browser
-3. Start managing your shelves!
+Downloadable shopping list in text format.
 
-## Usage
-- Add items to your shelves
-- Organize items by category
-- Track item locations
-- Manage inventory efficiently
+Clean, responsive design with light and dark mode toggle.
 
-## Contributing
-Feel free to contribute to this project by:
-1. Forking the repository
-2. Creating a new branch
-3. Making your changes
-4. Submitting a pull request
+Data persistence using browser localStorage.
 
-## License
-This project is open source and available under the MIT License.
+Technologies Used
+HTML5 – Markup structure
 
-## Contact
-For any questions or suggestions, please open an issue in the repository. 
+CSS3 – Styling and layout
+
+JavaScript (Vanilla) – Application logic and interactivity
+
+Getting Started
+To run the project locally:
+
+Clone or download this repository.
+
+Open the index.html file in any modern web browser.
+
+Start adding items to your kitchen inventory using the form interface.
+
+No additional setup or dependencies are required.
+
+Use Case Example
+Add an item like "Milk" with an expiry date two days from now.
+
+The system will automatically mark it as "Expires Soon".
+
+Add "Rice" with a quantity of 1 kg and a minimum limit of 2 kg.
+
+The system will indicate it as "Use Immediately".
+
+Use the shopping list tools to generate and download a list of low-stock or expiring items.
+
+File Structure
+bash
+Copy
+Edit
+SmartShelf/
+├── index.html        # Main HTML file
+├── style.css         # Application styling
+├── script.js         # JavaScript logic
+└── assets/
+    └── icon.png      # Application icon (optional)
+Potential Improvements
+Integration with cloud storage (e.g., Firebase) for syncing across devices.
+
+Mobile-first progressive web app (PWA) support.
+
+Notifications for expiring items.
+
+Barcode scanner integration for adding items quickly.
+
+License
+This project is open-source and available under the MIT License.
