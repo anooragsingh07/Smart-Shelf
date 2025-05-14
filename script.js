@@ -155,12 +155,15 @@ function renderInventory(items = inventory) {
     items.forEach(item => {
         const row = document.createElement('tr');
         const isLowStock = item.quantity <= item.minLimit;
-        const statusClass = getStatusColor(item.expiryDate);
-        
+        let statusClass, statusText;
         if (isLowStock) {
+            statusClass = 'status-low';
+            statusText = 'Low Stock';
             row.classList.add('low-stock');
+        } else {
+            statusClass = getStatusColor(item.expiryDate);
+            statusText = statusClass === 'status-ok' ? 'Good' : statusClass === 'status-soon' ? 'Expires Soon' : 'Use Immediately';
         }
-        
         row.innerHTML = `
             <td>${item.name}</td>
             <td>${item.quantity}</td>
@@ -168,7 +171,7 @@ function renderInventory(items = inventory) {
             <td>${item.minLimit}</td>
             <td>${item.expiryDate ? item.expiryDate : '-'}</td>
             <td class="${statusClass}">
-                ${statusClass === 'status-ok' ? 'Good' : statusClass === 'status-soon' ? 'Expires Soon' : 'Use Immediately'}
+                ${statusText}
             </td>
             <td>
                 <button class="action-btn edit-btn" onclick="openUpdateModal(${item.id})" data-tooltip="Update quantity">
@@ -179,7 +182,6 @@ function renderInventory(items = inventory) {
                 </button>
             </td>
         `;
-        
         inventoryBody.appendChild(row);
     });
     

@@ -288,6 +288,11 @@ tr:hover {
     font-weight: 700;
 }
 
+.status-low {
+    color: var(--color-warning);
+    font-weight: 700;
+}
+
 /* Action buttons */
 .action-btn {
     padding: 7px 14px;
