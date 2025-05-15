@@ -164,7 +164,7 @@ function renderInventory(items = inventory) {
     
     items.forEach(item => {
         const row = document.createElement('tr');
-        const isLowStock = item.quantity <= item.minLimit;
+        const isLowStock = item.quantity < item.minLimit;
         let statusClass, statusText;
         if (isLowStock) {
             statusClass = 'status-low';
@@ -227,51 +227,6 @@ function showNotification(message, type = 'info') {
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
-
-// Add notification styles
-const style = document.createElement('style');
-style.textContent = `
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 25px;
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        transform: translateX(120%);
-        transition: transform 0.3s ease;
-        z-index: 1000;
-    }
-    
-    .notification.show {
-        transform: translateX(0);
-    }
-    
-    .notification.success {
-        border-left: 4px solid var(--secondary-color);
-    }
-    
-    .notification.error {
-        border-left: 4px solid var(--danger-color);
-    }
-    
-    .notification i {
-        font-size: 1.2em;
-    }
-    
-    .notification.success i {
-        color: var(--secondary-color);
-    }
-    
-    .notification.error i {
-        color: var(--danger-color);
-    }
-`;
-document.head.appendChild(style);
 
 // Make functions available globally
 window.openUpdateModal = openUpdateModal;
@@ -505,47 +460,4 @@ function attachEditShoppingListHandler() {
     if (editBtn) {
         editBtn.onclick = openEditShoppingListModal;
     }
-}
-
-// DARK MODE TOGGLE
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-
-function setTheme(dark) {
-    if (dark) {
-        body.classList.add('dark');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        localStorage.setItem('smartshelf-theme', 'dark');
-    } else {
-        body.classList.remove('dark');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        localStorage.setItem('smartshelf-theme', 'light');
-    }
-}
-
-// Load theme preference
-(function() {
-    const saved = localStorage.getItem('smartshelf-theme');
-    setTheme(saved === 'dark');
-})();
-
-themeToggle.onclick = function() {
-    setTheme(!body.classList.contains('dark'));
-};
-
-body.dark .modal-content {
-    background: #23272f !important; /* much darker background */
-    color: #f7f7f7 !important;      /* light text */
-}
-
-body.dark .modal-content input,
-body.dark .modal-content select {
-    background: #181c22 !important; /* even darker input background */
-    color: #f7f7f7 !important;      /* light text */
-    border: 1.5px solid var(--color-border);
-}
-
-body.dark .modal-content button,
-body.dark .modal-content input[type="submit"] {
-    color: #fff !important;
 }
