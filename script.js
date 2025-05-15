@@ -461,3 +461,29 @@ function attachEditShoppingListHandler() {
         editBtn.onclick = openEditShoppingListModal;
     }
 }
+
+// DARK MODE TOGGLE
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+function setTheme(dark) {
+    if (dark) {
+        body.classList.add('dark');
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('smartshelf-theme', 'dark');
+    } else {
+        body.classList.remove('dark');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('smartshelf-theme', 'light');
+    }
+}
+
+// Load theme preference on page load
+(function() {
+    const saved = localStorage.getItem('smartshelf-theme');
+    setTheme(saved === 'dark');
+})();
+
+themeToggle.onclick = function() {
+    setTheme(!body.classList.contains('dark'));
+};
