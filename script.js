@@ -278,14 +278,18 @@ window.openUpdateModal = openUpdateModal;
 window.deleteItem = deleteItem;
 
 function generateShoppingList(listOverride) {
+    // Debug: log inventory and override
+    console.log('INVENTORY:', inventory);
+    console.log('LIST OVERRIDE:', listOverride);
     // Use override list if provided (for editing), else use low-stock items
-    const lowStockItems = (listOverride || inventory.filter(item => item.quantity < item.minLimit))
+    const lowStockItems = (listOverride || inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit)))
         .map(item => ({
             name: item.name,
-            toBuy: Math.max(0, (item.minLimit - item.quantity)),
+            toBuy: Math.max(0, (parseFloat(item.minLimit) - parseFloat(item.quantity))),
             unit: item.unit
         }))
         .filter(item => item.toBuy > 0);
+    console.log('LOW STOCK ITEMS:', lowStockItems);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -420,14 +424,17 @@ function importInventory() {
 
 // Add modal for editing shopping list before download
 function openEditShoppingListModal() {
+    // Debug: log inventory
+    console.log('INVENTORY (edit modal):', inventory);
     // Get low-stock items
-    const lowStockItems = inventory.filter(item => item.quantity < item.minLimit)
+    const lowStockItems = inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit))
         .map(item => ({
             name: item.name,
-            toBuy: Math.max(0, (item.minLimit - item.quantity)),
+            toBuy: Math.max(0, (parseFloat(item.minLimit) - parseFloat(item.quantity))),
             unit: item.unit
         }))
         .filter(item => item.toBuy > 0);
+    console.log('LOW STOCK ITEMS (edit modal):', lowStockItems);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
