@@ -15,8 +15,8 @@ let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
 function sanitizeInventory() {
     inventory = inventory.map(item => ({
         ...item,
-        quantity: typeof item.quantity === 'string' ? parseFloat(item.quantity) : item.quantity,
-        minLimit: typeof item.minLimit === 'string' ? parseFloat(item.minLimit) : item.minLimit
+        quantity: parseFloat(item.quantity),
+        minLimit: parseFloat(item.minLimit)
     }));
 }
 
@@ -278,18 +278,17 @@ window.openUpdateModal = openUpdateModal;
 window.deleteItem = deleteItem;
 
 function generateShoppingList(listOverride) {
-    // Debug: log inventory and override
-    console.log('INVENTORY:', inventory);
-    console.log('LIST OVERRIDE:', listOverride);
-    // Use override list if provided (for editing), else use low-stock items
-    const lowStockItems = (listOverride || inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit)))
+    sanitizeInventory();
+    alert(JSON.stringify(inventory, null, 2));
+    // Use override list if provided and is an array, else use low-stock items
+    const sourceList = Array.isArray(listOverride) ? listOverride : inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit));
+    const lowStockItems = sourceList
         .map(item => ({
             name: item.name,
             toBuy: Math.max(0, (parseFloat(item.minLimit) - parseFloat(item.quantity))),
             unit: item.unit
         }))
         .filter(item => item.toBuy > 0);
-    console.log('LOW STOCK ITEMS:', lowStockItems);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -424,8 +423,8 @@ function importInventory() {
 
 // Add modal for editing shopping list before download
 function openEditShoppingListModal() {
-    // Debug: log inventory
-    console.log('INVENTORY (edit modal):', inventory);
+    sanitizeInventory();
+    alert(JSON.stringify(inventory, null, 2));
     // Get low-stock items
     const lowStockItems = inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit))
         .map(item => ({
