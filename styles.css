@@ -497,4 +497,24 @@ tr:hover {
 /* Dark mode icon color */
 body.dark .theme-toggle {
     color: var(--color-warning);
+}
+
+function sanitizeInventory() {
+    inventory = inventory.map(item => ({
+        ...item,
+        quantity: parseFloat(item.quantity),
+        minLimit: parseFloat(item.minLimit)
+    }));
+}
+
+function generateShoppingList(listOverride) {
+    sanitizeInventory();
+    alert(JSON.stringify(inventory, null, 2));
+    // ...rest of your code
+}
+
+function openEditShoppingListModal() {
+    sanitizeInventory();
+    alert(JSON.stringify(inventory, null, 2));
+    // ...rest of your code
 } 
