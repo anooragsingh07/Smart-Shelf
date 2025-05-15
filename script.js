@@ -279,16 +279,15 @@ window.deleteItem = deleteItem;
 
 function generateShoppingList(listOverride) {
     sanitizeInventory();
-    alert(JSON.stringify(inventory, null, 2));
     // Use override list if provided and is an array, else use low-stock items
     const sourceList = Array.isArray(listOverride) ? listOverride : inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit));
     const lowStockItems = sourceList
         .map(item => ({
             name: item.name,
-            toBuy: Math.max(0, (parseFloat(item.minLimit) - parseFloat(item.quantity))),
+            toBuy: Math.max(0, (parseFloat(item.minLimit || item.toBuy) - parseFloat(item.quantity || 0))),
             unit: item.unit
         }))
-        .filter(item => item.toBuy > 0);
+        .filter(item => item.toBuy > 0 || (typeof item.toBuy === 'number' && item.toBuy > 0));
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -424,7 +423,6 @@ function importInventory() {
 // Add modal for editing shopping list before download
 function openEditShoppingListModal() {
     sanitizeInventory();
-    alert(JSON.stringify(inventory, null, 2));
     // Get low-stock items
     const lowStockItems = inventory.filter(item => parseFloat(item.quantity) < parseFloat(item.minLimit))
         .map(item => ({
@@ -433,7 +431,6 @@ function openEditShoppingListModal() {
             unit: item.unit
         }))
         .filter(item => item.toBuy > 0);
-    console.log('LOW STOCK ITEMS (edit modal):', lowStockItems);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -497,6 +494,7 @@ function openEditShoppingListModal() {
             };
         }).filter(item => item.toBuy > 0);
         modal.remove();
+        // Pass editedItems directly to generateShoppingList
         generateShoppingList(editedItems);
     };
 }
