@@ -532,3 +532,20 @@ function setTheme(dark) {
 themeToggle.onclick = function() {
     setTheme(!body.classList.contains('dark'));
 };
+
+body.dark .modal-content {
+    background: #23272f !important; /* much darker background */
+    color: #f7f7f7 !important;      /* light text */
+}
+
+body.dark .modal-content input,
+body.dark .modal-content select {
+    background: #181c22 !important; /* even darker input background */
+    color: #f7f7f7 !important;      /* light text */
+    border: 1.5px solid var(--color-border);
+}
+
+body.dark .modal-content button,
+body.dark .modal-content input[type="submit"] {
+    color: #fff !important;
+}

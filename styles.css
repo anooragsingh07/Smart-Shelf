@@ -499,22 +499,26 @@ body.dark .theme-toggle {
     color: var(--color-warning);
 }
 
-function sanitizeInventory() {
-    inventory = inventory.map(item => ({
-        ...item,
-        quantity: parseFloat(item.quantity),
-        minLimit: parseFloat(item.minLimit)
-    }));
+body.dark .modal-content {
+    background: var(--color-bg-card);
+    color: var(--color-text);
 }
 
-function generateShoppingList(listOverride) {
-    sanitizeInventory();
-    alert(JSON.stringify(inventory, null, 2));
-    // ...rest of your code
+body.dark .modal-content input,
+body.dark .modal-content select {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1.5px solid var(--color-border);
 }
 
-function openEditShoppingListModal() {
-    sanitizeInventory();
-    alert(JSON.stringify(inventory, null, 2));
-    // ...rest of your code
+body.dark .notification {
+    background: #23272f;
+    color: #f7f7f7;
+    border-left: 4px solid var(--color-secondary);
+}
+body.dark .notification.success i {
+    color: var(--color-secondary);
+}
+body.dark .notification.error i {
+    color: var(--color-danger);
 } 
