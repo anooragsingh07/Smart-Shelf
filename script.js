@@ -12,6 +12,16 @@ const downloadReceiptBtn = document.getElementById('downloadReceipt');
 let currentItemId = null;
 let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
 
+function sanitizeInventory() {
+    inventory = inventory.map(item => ({
+        ...item,
+        quantity: typeof item.quantity === 'string' ? parseFloat(item.quantity) : item.quantity,
+        minLimit: typeof item.minLimit === 'string' ? parseFloat(item.minLimit) : item.minLimit
+    }));
+}
+
+sanitizeInventory();
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     renderInventory();
@@ -269,7 +279,13 @@ window.deleteItem = deleteItem;
 
 function generateShoppingList(listOverride) {
     // Use override list if provided (for editing), else use low-stock items
-    const lowStockItems = listOverride || inventory.filter(item => item.quantity <= item.minLimit);
+    const lowStockItems = (listOverride || inventory.filter(item => item.quantity < item.minLimit))
+        .map(item => ({
+            name: item.name,
+            toBuy: Math.max(0, (item.minLimit - item.quantity)),
+            unit: item.unit
+        }))
+        .filter(item => item.toBuy > 0);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -305,7 +321,7 @@ function generateShoppingList(listOverride) {
                 ${lowStockItems.map(item => `
                     <li style="display:flex;justify-content:space-between;padding:8px 0 8px 0;border-bottom:1px dotted #ddd;font-size:1.1em;">
                         <span>${item.name}</span>
-                        <span>${item.quantity} ${item.unit}</span>
+                        <span>${item.toBuy} ${item.unit}</span>
                     </li>
                 `).join('')}
             </ul>
@@ -405,7 +421,13 @@ function importInventory() {
 // Add modal for editing shopping list before download
 function openEditShoppingListModal() {
     // Get low-stock items
-    const lowStockItems = inventory.filter(item => item.quantity <= item.minLimit);
+    const lowStockItems = inventory.filter(item => item.quantity < item.minLimit)
+        .map(item => ({
+            name: item.name,
+            toBuy: Math.max(0, (item.minLimit - item.quantity)),
+            unit: item.unit
+        }))
+        .filter(item => item.toBuy > 0);
     if (lowStockItems.length === 0) {
         showNotification('No items need to be restocked!', 'info');
         return;
@@ -434,7 +456,7 @@ function openEditShoppingListModal() {
                     ${lowStockItems.map((item, idx) => `
                         <li style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
                             <input type="text" value="${item.name}" data-idx="${idx}" style="flex:2;padding:6px 8px;border:1px solid #ccc;border-radius:4px;" required />
-                            <input type="number" value="${item.quantity}" min="1" data-idx="${idx}" style="width:60px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;" required />
+                            <input type="number" value="${item.toBuy}" min="1" data-idx="${idx}" style="width:60px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;" required />
                             <input type="text" value="${item.unit}" data-idx="${idx}" style="width:50px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;" required />
                             <button type="button" data-remove="${idx}" style="background:#e74c3c;color:#fff;border:none;border-radius:4px;padding:6px 10px;cursor:pointer;">Remove</button>
                         </li>
@@ -464,10 +486,10 @@ function openEditShoppingListModal() {
             const inputs = li.querySelectorAll('input');
             return {
                 name: inputs[0].value,
-                quantity: inputs[1].value,
+                toBuy: parseFloat(inputs[1].value),
                 unit: inputs[2].value
             };
-        });
+        }).filter(item => item.toBuy > 0);
         modal.remove();
         generateShoppingList(editedItems);
     };
